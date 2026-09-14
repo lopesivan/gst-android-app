@@ -47,7 +47,7 @@ configure: check-gstreamer
 		exit 1; \
 	fi
 	@echo -e "$(YELLOW)JAVA_HOME=$(JAVA_HOME)$(NC)"
-	@printf 'sdk.dir=%s\nndk.dir=%s/ndk/29.0.14206865\n' "$(SDK_DIR)" "$(SDK_DIR)" > local.properties
+	@printf 'sdk.dir=%s\n' "$(SDK_DIR)" > local.properties
 	@echo -e "$(GREEN)==> configure concluido$(NC)"
 
 build: configure

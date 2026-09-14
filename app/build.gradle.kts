@@ -20,16 +20,21 @@ android {
         versionName = "1.0"
 
         externalNativeBuild {
-            ndkBuild {
-                arguments += "GSTREAMER_ROOT_ANDROID=${gstreamerRoot.get()}"
+            cmake {
+                arguments += listOf(
+                    "-DANDROID_STL=c++_shared",
+                    "-DGSTREAMER_ROOT_ANDROID=${gstreamerRoot.get()}"
+                )
                 abiFilters += "arm64-v8a"
+                targets += "gst-android-app"
             }
         }
     }
 
     externalNativeBuild {
-        ndkBuild {
-            path = file("src/main/jni/Android.mk")
+        cmake {
+            path = file("src/main/jni/CMakeLists.txt")
+            version = "3.22.1"
         }
     }
 

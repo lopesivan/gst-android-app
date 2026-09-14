@@ -1,7 +1,7 @@
 # gst-android-app
 
 Aplicativo Android mínimo e funcional que incorpora o GStreamer de forma
-estática. O botão principal executa este pipeline de áudio:
+estática usando CMake. O botão principal executa este pipeline de áudio:
 
 ```text
 audiotestsrc wave=sine freq=440 ! audioconvert ! audioresample ! openslessink
@@ -19,6 +19,7 @@ O diretório ARM64 precisa conter, entre outros arquivos:
 
 ```text
 /opt/gstreamer/arm64/share/gst-android/ndk-build/gstreamer-1.0.mk
+/opt/gstreamer/arm64/share/cmake/GStreamerMobileConfig.cmake
 /opt/gstreamer/arm64/lib/libgstreamer-1.0.a
 /opt/gstreamer/arm64/lib/gstreamer-1.0/libgstaudiotestsrc.a
 /opt/gstreamer/arm64/lib/gstreamer-1.0/libgstaudioconvert.a
