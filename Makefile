@@ -1,12 +1,13 @@
 SHELL := /bin/bash
 
-APP_ID       := dev.ivan.gstapp
-ACTIVITY     := .MainActivity
-GRADLE       := ./gradlew
-APK_DEBUG    := app/build/outputs/apk/debug/app-debug.apk
+APP_ID                 := dev.ivan.gstapp
+ACTIVITY               := .MainActivity
+GRADLE                 := ./gradlew
+APK_DEBUG              := app/build/outputs/apk/debug/app-debug.apk
+MY_GRADLE_LOCAL        := /opt/gradle/gradle-9.4.1/bin/gradle
 GSTREAMER_ROOT_ANDROID ?= /opt/gstreamer
-SDK_DIR      ?= /home/ivan/Android/Sdk
-ADB          := $(SDK_DIR)/platform-tools/adb
+SDK_DIR                ?= /home/ivan/Android/Sdk
+ADB                    := $(SDK_DIR)/platform-tools/adb
 
 GREEN  := \033[0;32m
 YELLOW := \033[0;33m
@@ -19,7 +20,7 @@ init:
 	@echo -e "$(GREEN)==> Verificando wrapper do Gradle$(NC)"
 	@if [ ! -f gradlew ]; then \
 		echo -e "$(YELLOW)gradlew ausente, gerando wrapper$(NC)"; \
-		gradle wrapper --gradle-version 8.9; \
+		$(MY_GRADLE_LOCAL) wrapper --gradle-version 8.9; \
 	fi
 	@chmod +x $(GRADLE)
 	@echo -e "$(GREEN)==> init concluido$(NC)"
