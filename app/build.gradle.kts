@@ -3,6 +3,10 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val gstreamerRoot = providers.gradleProperty("GSTREAMER_ROOT_ANDROID")
+    .orElse(providers.environmentVariable("GSTREAMER_ROOT_ANDROID"))
+    .orElse("/opt/gstreamer")
+
 android {
     namespace = "dev.ivan.gstapp"
     compileSdk = 35
@@ -17,8 +21,8 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                arguments += "GSTREAMER_ROOT_ANDROID=/opt/gstreamer"
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+                arguments += "GSTREAMER_ROOT_ANDROID=${gstreamerRoot.get()}"
+                abiFilters += "arm64-v8a"
             }
         }
     }

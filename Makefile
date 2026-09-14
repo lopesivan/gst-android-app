@@ -8,7 +8,7 @@ APK_DEBUG    := app/build/outputs/apk/debug/app-debug.apk
 GSTREAMER_ROOT_ANDROID ?= /opt/gstreamer
 SDK_DIR      ?= /home/ivan/Android/Sdk
 ADB          := $(SDK_DIR)/platform-tools/adb
-JAVA_HOME    ?= $(shell jenv prefix 17 2>/dev/null || jenv prefix 21 2>/dev/null)
+JAVA_HOME    ?= $(shell jenv prefix 17 2>/dev/null || jenv prefix 21 2>/dev/null || readlink -f "$$(command -v java)" | sed 's:/bin/java$$::')
 export JAVA_HOME
 
 GREEN  := \033[0;32m
@@ -16,7 +16,7 @@ YELLOW := \033[0;33m
 RED    := \033[0;31m
 NC     := \033[0m
 
-.PHONY: init configure build install uninstall clean run
+.PHONY: init configure check-gstreamer build install uninstall clean run
 
 init:
 	@echo -e "$(GREEN)==> Verificando wrapper do Gradle$(NC)"
@@ -27,12 +27,14 @@ init:
 	@chmod +x $(GRADLE)
 	@echo -e "$(GREEN)==> init concluido$(NC)"
 
-configure:
+check-gstreamer:
 	@echo -e "$(GREEN)==> Verificando GSTREAMER_ROOT_ANDROID$(NC)"
-	@if [ ! -d "$(GSTREAMER_ROOT_ANDROID)/arm64" ]; then \
+	@if [ ! -f "$(GSTREAMER_ROOT_ANDROID)/arm64/share/gst-android/ndk-build/gstreamer-1.0.mk" ]; then \
 		echo -e "$(RED)GStreamer nao encontrado em $(GSTREAMER_ROOT_ANDROID)$(NC)"; \
 		exit 1; \
 	fi
+
+configure: check-gstreamer
 	@echo -e "$(GREEN)==> Verificando SDK Android$(NC)"
 	@if [ ! -d "$(SDK_DIR)" ]; then \
 		echo -e "$(RED)SDK nao encontrado em $(SDK_DIR)$(NC)"; \
@@ -45,7 +47,7 @@ configure:
 		exit 1; \
 	fi
 	@echo -e "$(YELLOW)JAVA_HOME=$(JAVA_HOME)$(NC)"
-	@echo "sdk.dir=$(SDK_DIR)" > local.properties
+	@printf 'sdk.dir=%s\nndk.dir=%s/ndk/29.0.14206865\n' "$(SDK_DIR)" "$(SDK_DIR)" > local.properties
 	@echo -e "$(GREEN)==> configure concluido$(NC)"
 
 build: configure

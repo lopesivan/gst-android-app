@@ -27,11 +27,10 @@ GSTREAMER_NDK_BUILD_PATH := $(GSTREAMER_ROOT)/share/gst-android/ndk-build
 
 # Plugins estáticos que entram em libgstreamer_android.so.
 # Ajuste essa lista conforme os elementos que seu pipeline usar.
-GSTREAMER_PLUGINS := coreelements playback videoconvert audioconvert \
-                     audioresample videoscale videotestsrc audiotestsrc \
-                     autodetect opensles app
+GSTREAMER_PLUGINS := coreelements audiotestsrc audioconvert \
+                     audioresample opensles
 
-GSTREAMER_EXTRA_DEPS := gstreamer-video-1.0
+GSTREAMER_EXTRA_DEPS := gstreamer-audio-1.0
 GSTREAMER_EXTRA_LIBS := -liconv
 
 include $(GSTREAMER_NDK_BUILD_PATH)/gstreamer-1.0.mk
