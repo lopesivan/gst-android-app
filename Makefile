@@ -1,13 +1,15 @@
 SHELL := /bin/bash
 
-APP_ID                 := dev.ivan.gstapp
-ACTIVITY               := .MainActivity
-GRADLE                 := ./gradlew
-APK_DEBUG              := app/build/outputs/apk/debug/app-debug.apk
-MY_GRADLE_LOCAL        := /opt/gradle/gradle-9.4.1/bin/gradle
+APP_ID       := dev.ivan.gstapp
+ACTIVITY     := .MainActivity
+GRADLE       := ./gradlew
+MY_GRADLE_LOCAL := /opt/gradle/gradle-9.4.1/bin/gradle
+APK_DEBUG    := app/build/outputs/apk/debug/app-debug.apk
 GSTREAMER_ROOT_ANDROID ?= /opt/gstreamer
-SDK_DIR                ?= /home/ivan/Android/Sdk
-ADB                    := $(SDK_DIR)/platform-tools/adb
+SDK_DIR      ?= /home/ivan/Android/Sdk
+ADB          := $(SDK_DIR)/platform-tools/adb
+JAVA_HOME    ?= $(shell jenv prefix 17 2>/dev/null || jenv prefix 21 2>/dev/null)
+export JAVA_HOME
 
 GREEN  := \033[0;32m
 YELLOW := \033[0;33m
@@ -36,6 +38,13 @@ configure:
 		echo -e "$(RED)SDK nao encontrado em $(SDK_DIR)$(NC)"; \
 		exit 1; \
 	fi
+	@echo -e "$(GREEN)==> Verificando JDK (Gradle 8.9 nao roda em JDK > 21)$(NC)"
+	@if [ -z "$(JAVA_HOME)" ]; then \
+		echo -e "$(RED)Nenhuma JDK 17/21 encontrada via jenv$(NC)"; \
+		echo -e "$(YELLOW)Rode: jenv versions   e depois   jenv local <versao-17-ou-21>$(NC)"; \
+		exit 1; \
+	fi
+	@echo -e "$(YELLOW)JAVA_HOME=$(JAVA_HOME)$(NC)"
 	@echo "sdk.dir=$(SDK_DIR)" > local.properties
 	@echo -e "$(GREEN)==> configure concluido$(NC)"
 
